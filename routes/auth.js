@@ -2,11 +2,10 @@ const express = require('express')
 const router = express.Router()
 
 const User = require('../models/User')
-const {registerValidation} = require('../validations/validation')
+const {registerValidation, loginValidation} = require('../validations/validation')
 
 const bcryptjs = require('bcryptjs')
 const jsonwebtoken = require('jsonwebtoken')
-
 
 router.post('/register', async(req,res)=>{
     // Validation 1: Check user input and validate throuth joi
@@ -41,7 +40,27 @@ router.post('/register', async(req,res)=>{
 })
 
 router.post('/login', async(req,res)=>{
+    // Validation 1: Check user input
+    const {error} = loginValidation(req.body)
+    if(error){
+        return res.status(400).send({message:error['details'][0]['message']})
+    }
 
+    // Validation 2: Check is user exists
+    const user = await User.findOne({email:req.body.email})
+    if (!user){
+        return res.status(400).send({message:'User does not exists'}) //Change message after developing
+    }
+
+    // Validation 3: Check user credentials
+    const passwordValidation = await bcryptjs.compare(req.body.password, user.password)
+    if (!passwordValidation){
+        return res.status(400).send({message:'Password is wrong'})
+    }
+
+    // Generate an auth-token
+    const token = jsonwebtoken.sign({_id:user.id}, process.env.TOKEN_SECRET)
+    res.header('auth-token', token).send({'auth-token':token})
 })
 
 
