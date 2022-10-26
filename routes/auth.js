@@ -7,6 +7,7 @@ const {registerValidation} = require('../validations/validation')
 const bcryptjs = require('bcryptjs')
 const jsonwebtoken = require('jsonwebtoken')
 
+
 router.post('/register', async(req,res)=>{
     // Validation 1: Check user input and validate throuth joi
     const {error} = registerValidation(req.body)
@@ -38,5 +39,10 @@ router.post('/register', async(req,res)=>{
         res.status(400).send({message:error})
     }
 })
+
+router.post('/login', async(req,res)=>{
+
+})
+
 
 module.exports = router
