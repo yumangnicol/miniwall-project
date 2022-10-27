@@ -7,12 +7,13 @@ const verifyToken = require('../verifyToken')
 
 router.post('/', async(req,res)=>{
 
-    // Validation 1: Check user input and validate throuth joi
+    // Validation 1: Check User input
     const {error} = commentValidation(req.body)
     if(error){
         return res.status(400).send({message:error['details'][0]['message']})
     }
 
+    // Saves a new Comment into inside a Post
     try {
         const pushCommentToPost = await Post.findById(req.params.postId)
         pushCommentToPost.comments.push({

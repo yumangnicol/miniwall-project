@@ -6,13 +6,14 @@ const {postValidation} = require('../validations/validation')
 const verifyToken = require('../verifyToken')
 
 router.post('/', verifyToken, async(req, res)=>{
-    // console.log(req.body)
-    // console.log(res.user)
+
+    // Validation 1: Checks User input
     const {error} = postValidation(req.body)
     if(error){
         return res.status(400).send({message:error['details'][0]['message']})
     }
 
+    // Saves Post data
     const postData = new Post({        
         created_by: res.user._id,
         title: req.body.title,
