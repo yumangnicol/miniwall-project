@@ -18,11 +18,13 @@ const postSchema = mongoose.Schema({
     title: {
         type: String,
         required: true,
+        min: 1,
         max: 280
     },
     description: {
         type: String,
         required: true,
+        min: 1,
         max: 280
     },
     created_date: {
