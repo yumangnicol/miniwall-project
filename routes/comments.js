@@ -19,6 +19,7 @@ router.post('/', async(req,res)=>{
         pushCommentToPost.comments.push({
             text: req.body.text
         })
+        pushCommentToPost.save()
         res.send(pushCommentToPost)    
     } catch (error) {
         res.status(400).send({message:error})
