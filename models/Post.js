@@ -12,15 +12,15 @@ const commentSchema = mongoose.Schema({
 })
 
 const postSchema = mongoose.Schema({
-    owner: {
-        type: ObjectId
+    created_by: {
+        type: mongoose.Schema.Types.ObjectId
     },
     title: {
         type: String,
         required: true,
         max: 280
     },
-    desciption: {
+    description: {
         type: String,
         required: true,
         max: 280

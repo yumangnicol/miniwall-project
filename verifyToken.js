@@ -7,7 +7,7 @@ function auth(req,res,next){
     }
 
     try {
-        const verified =jsonwebtoken.verify(token,process.env.TOKEN_SECRET)
+        const verified = jsonwebtoken.verify(token,process.env.TOKEN_SECRET)
         res.user = verified
         next()
     } catch (error) {

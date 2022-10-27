@@ -9,7 +9,10 @@ app.use(bodyParser.json())
 
 // Middleware
 const authRoute = require('./routes/auth')
-app.use('/api/user', authRoute)
+app.use('/api/users', authRoute)
+
+const postsRoute = require('./routes/posts')
+app.use('/api/posts', postsRoute)
 
 mongoose.connect(process.env.DB_CONNECTOR, ()=>{
     console.log('DB is connected...')
