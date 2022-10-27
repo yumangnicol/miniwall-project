@@ -1,9 +1,13 @@
 const mongoose = require('mongoose')
 
 const commentSchema = mongoose.Schema({
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
     text: {
         type: String, 
-        required: true
+        required: true,
+        min: 1
     }, 
     created_date: {
         type: Date,

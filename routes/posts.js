@@ -23,7 +23,7 @@ router.post('/', verifyToken, async(req, res)=>{
         const postToSave = await postData.save()
         res.send(postToSave)
     } catch (error) {
-        res.send({message:error})
+        res.status(400).send({message:error})
     }
 })
 

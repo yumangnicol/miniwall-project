@@ -25,6 +25,14 @@ const postValidation = (data) => {
     return schemaValidation.validate(data)
 }
 
+const commentValidation = (data) => {
+    const schemaValidation = joi.object({
+        text: joi.string().required().min(1),
+    })
+    return schemaValidation.validate(data)
+}
+
 module.exports.registerValidation = registerValidation
 module.exports.loginValidation = loginValidation
 module.exports.postValidation = postValidation
+module.exports.commentValidation = commentValidation
