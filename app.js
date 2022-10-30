@@ -17,6 +17,9 @@ app.use('/api/posts', postsRoute)
 const commentsRoute = require('./routes/comments')
 app.use('/api/posts/:postId/comments', commentsRoute)
 
+const likesRoute = require('./routes/likes')
+app.use('/api/posts/:postId/likes', likesRoute)
+
 mongoose.connect(process.env.DB_CONNECTOR, ()=>{
     console.log('DB is connected...')
 })
