@@ -6,7 +6,7 @@ const {postValidation} = require('../validations/validation')
 const verifyToken = require('../verifyToken')
 
 router.post('/', async(req,res)=>{
-
+    
 })
 
 module.exports = router

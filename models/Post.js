@@ -35,6 +35,10 @@ const postSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    likes: {
+        type: Number,
+        default: 0
+    },
     comments: {
         type: [commentSchema]
     }
