@@ -2,13 +2,11 @@ const mongoose = require('mongoose')
 
 const likeSchema = mongoose.Schema({
     owner: {
-        owner: {
-            type: mongoose.Schema.Types.ObjectId,
-        },
-        created_date: {
-            type: Date,
-            default: Date.now
-        }
+        type: mongoose.Schema.Types.ObjectId,
+    },
+    created_date: {
+        type: Date,
+        default: Date.now
     }
 })
 

@@ -5,11 +5,13 @@ const Post = require('../models/Post')
 const {postValidation} = require('../validations/validation')
 const verifyToken = require('../verifyToken')
 
-router.post('/', async(req,res)=>{
+router.post('/', verifyToken, async(req,res)=>{
     
     try {
         const pushLikeToPost = await Post.findById(req.params.postId)
-        pushLikeToPost.likes.push({})
+        pushLikeToPost.likes.push({
+            created_by: res.user._id
+        })
         const savedLike = await pushLikeToPost.save()
         res.send(pushLikeToPost)
     } catch (error) {

@@ -5,7 +5,7 @@ const Post = require('../models/Post')
 const {commentValidation} = require('../validations/validation')
 const verifyToken = require('../verifyToken')
 
-router.post('/', async(req,res)=>{
+router.post('/', verifyToken, async(req,res)=>{
 
     // Validation 1: Check User input
     const {error} = commentValidation(req.body)
