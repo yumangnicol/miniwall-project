@@ -8,8 +8,8 @@ const verifyToken = require('../verifyToken')
 router.post('/', verifyToken, async(req,res)=>{
 
     // Validation 1: Check if User is Owner
-    const post = await Post.findById(req.params.postId)
-    if(postOwner = res.user._id){
+    const ownPost = await Post.findOne({created_by: res.user._id})
+    if(ownPost){
         return res.status(400).send({message:"User cannot comment on own post"})
     }
 
