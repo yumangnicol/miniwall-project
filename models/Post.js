@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const likeSchema = mongoose.Schema({
-    owner: {
+    created_by: {
         type: mongoose.Schema.Types.ObjectId,
     },
     created_date: {
@@ -11,7 +11,7 @@ const likeSchema = mongoose.Schema({
 })
 
 const commentSchema = mongoose.Schema({
-    owner: {
+    created_by: {
         type: mongoose.Schema.Types.ObjectId,
     },
     text: {
