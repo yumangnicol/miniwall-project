@@ -28,4 +28,13 @@ router.post('/', verifyToken, async(req, res)=>{
     }
 })
 
+router.get('/', verifyToken, async(req, res)=>{
+
+    try {
+        // const Posts = await Post.aggregate()
+    } catch (error) {
+        res.status(400).send({message:error})
+    }
+})
+
 module.exports = router

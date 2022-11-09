@@ -13,11 +13,14 @@ router.post('/', verifyToken, async(req,res)=>{
         return res.status(400).send({message:"User cannot like own post"})
     }
     
+
+    // Saves a new Like to a Post and increments likes_count by 1
     try {
         const pushLikeToPost = await Post.findById(req.params.postId)
         pushLikeToPost.likes.push({
             created_by: res.user._id
         })
+        pushLikeToPost.$inc('likes_count', 1)        
         const savedLike = await pushLikeToPost.save()
         res.send(pushLikeToPost)
     } catch (error) {
