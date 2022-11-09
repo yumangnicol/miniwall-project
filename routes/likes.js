@@ -12,7 +12,12 @@ router.post('/', verifyToken, async(req,res)=>{
     if(ownPost){
         return res.status(400).send({message:"User cannot like own post"})
     }
-    
+
+    // Validation 2: Check if User has already liked Post
+    const hasLiked = await (await Post.find({ "likes.created_by": res.user._id})).length 
+    if(hasLiked){
+        return res.status(400).send({message:"User has already liked post"})
+    } 
 
     // Saves a new Like to a Post and increments likes_count by 1
     try {
@@ -21,8 +26,8 @@ router.post('/', verifyToken, async(req,res)=>{
             created_by: res.user._id
         })
         pushLikeToPost.$inc('likes_count', 1)        
-        const savedLike = await pushLikeToPost.save()
-        res.send(pushLikeToPost)
+        // const savedLike = await pushLikeToPost.save()
+        // res.send(pushLikeToPost)
     } catch (error) {
         res.status(400).send({message:error})
     }
