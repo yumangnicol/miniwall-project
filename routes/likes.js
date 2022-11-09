@@ -26,8 +26,8 @@ router.post('/', verifyToken, async(req,res)=>{
             created_by: res.user._id
         })
         pushLikeToPost.$inc('likes_count', 1)        
-        // const savedLike = await pushLikeToPost.save()
-        // res.send(pushLikeToPost)
+        const savedLike = await pushLikeToPost.save()
+        res.send(pushLikeToPost)
     } catch (error) {
         res.status(400).send({message:error})
     }
