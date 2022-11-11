@@ -8,22 +8,28 @@ const verifyToken = require('../verifyToken')
 router.post('/', verifyToken, async(req,res)=>{
 
     // Validation 1: Check if User is owner of Post
-    const ownPost = await Post.findOne({created_by: res.user._id})
+    const ownPost = await Post.findOne({user_id: res.user._id})
     if(ownPost){
         return res.status(400).send({message:"User cannot like own post"})
     }
 
     // Validation 2: Check if User has already liked Post
-    const hasLiked = await (await Post.find({ "likes.created_by": res.user._id})).length 
-    if(hasLiked){
-        return res.status(400).send({message:"User has already liked post"})
-    } 
+    try {
+        const hasLiked = await Post.findOne({ "_id" :req.params.postId, "likes.user_id": res.user._id})    
+        if(hasLiked){
+            return res.status(400).send({message:"User has already liked post"})
+        } 
+    } catch (error) {
+        res.status(400).send({message:error})
+    }
+    
 
     // Saves a new Like to a Post and increments likes_count by 1
     try {
         const pushLikeToPost = await Post.findById(req.params.postId)
+        Console.log(pushLikeToPost)        
         pushLikeToPost.likes.push({
-            created_by: res.user._id
+            user_id: res.user._id
         })
         pushLikeToPost.$inc('likes_count', 1)        
         const savedLike = await pushLikeToPost.save()

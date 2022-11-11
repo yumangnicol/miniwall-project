@@ -1,17 +1,17 @@
 const mongoose = require('mongoose')
 
 const likeSchema = mongoose.Schema({
-    created_by: {
+    user_id: {
         type: mongoose.Schema.Types.ObjectId,
     },
-    created_date: {
+    created_at: {
         type: Date,
         default: Date.now
     }
 })
 
 const commentSchema = mongoose.Schema({
-    created_by: {
+    user_id: {
         type: mongoose.Schema.Types.ObjectId,
     },
     text: {
@@ -19,14 +19,14 @@ const commentSchema = mongoose.Schema({
         required: true,
         min: 1
     }, 
-    created_date: {
+    created_at: {
         type: Date,
         default: Date.now
     }
 })
 
 const postSchema = mongoose.Schema({
-    created_by: {
+    user_id: {
         type: mongoose.Schema.Types.ObjectId
     },
     title: {
@@ -51,7 +51,7 @@ const postSchema = mongoose.Schema({
     comments: {
         type: [commentSchema]
     },
-    created_date: {
+    created_at: {
         type: Date,
         default: Date.now
     }

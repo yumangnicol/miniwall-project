@@ -15,7 +15,7 @@ router.post('/', verifyToken, async(req, res)=>{
 
     // Saves Post data
     const postData = new Post({        
-        created_by: res.user._id,
+        user_id: res.user._id,
         title: req.body.title,
         description: req.body.description,        
     })    
