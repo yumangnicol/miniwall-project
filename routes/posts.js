@@ -41,4 +41,19 @@ router.get('/', verifyToken, async(req, res)=>{
     }
 })
 
+router.get('/:postId', verifyToken, async(req,res)=>{
+    try {
+        const getPostById = await Post.findById(req.params.postId)
+
+        // Validation 1: Sends error message if post is not found
+        if(getPostById == null){
+            return res.status(400).send({message:"Cannot find post with that id"})
+        }
+
+        res.send(getPostById)
+    } catch (error) {
+        res.send({message: error})
+    }
+})
+
 module.exports = router
