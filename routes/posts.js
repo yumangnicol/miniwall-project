@@ -2,8 +2,8 @@ const express = require('express')
 const router = express.Router()
 
 const Post = require('../models/Post')
-const {postValidation} = require('../validations/validation')
-const verifyToken = require('../verifyToken')
+const {postValidation} = require('../middleware/validation')
+const verifyToken = require('../middleware/verifyToken')
 
 // Creates new Post
 router.post('/', verifyToken, async(req, res)=>{

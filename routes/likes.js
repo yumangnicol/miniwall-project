@@ -2,9 +2,8 @@ const express = require('express')
 const router = express.Router({mergeParams:true})
 
 const Post = require('../models/Post')
-const verifyToken = require('../verifyToken')
 
-router.post('/', verifyToken, async(req,res)=>{
+router.post('/', async(req,res)=>{
 
     // Validation 1: Check if User is owner of Post
     const ownPost = await Post.findOne({"_id" :req.params.postId, user_id: res.user._id})

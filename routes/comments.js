@@ -2,8 +2,8 @@ const express = require('express')
 const router = express.Router({mergeParams:true})
 
 const Post = require('../models/Post')
-const {commentValidation} = require('../validations/validation')
-const verifyToken = require('../verifyToken')
+const {commentValidation} = require('../middleware/validation')
+const verifyToken = require('../middleware/verifyToken')
 
 router.post('/', verifyToken, async(req,res)=>{
     const getPostById = await Post.findById(req.params.postId)   
