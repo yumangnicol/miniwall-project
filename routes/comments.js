@@ -6,34 +6,33 @@ const {commentValidation} = require('../validations/validation')
 const verifyToken = require('../verifyToken')
 
 router.post('/', verifyToken, async(req,res)=>{
+    const getPostById = await Post.findById(req.params.postId)   
 
-    // Validation 1: Check if User is owner of Post
-    const ownPost = await Post.findOne({"_id" :req.params.postId, user_id: res.user._id})
-    if(ownPost){
+    // Validation 1: Checks if Post exists    
+    if(getPostById == null){
+        return res.status(400).send({message:"Cannot find post with that id"})
+    } 
+
+    // Validation 2: Checks if User is owner of Post    
+    if(getPostById.user_id == res.user._id){
         return res.status(400).send({message:"User cannot comment on own post"})
     }
 
-    // Validation 2: Check User input
+    // Validation 3: Checks User input
     const {error} = commentValidation(req.body)
     if(error){
         return res.status(400).send({message:error['details'][0]['message']})
     }
 
-    // Saves a new Comment into inside a Post
-    try {        
-        const pushCommentToPost = await Post.findById(req.params.postId)
-
-        // Validation 3: Sends error message if post is not found
-        if(pushCommentToPost == null){
-            return res.status(400).send({message:"Cannot find post with that id"})
-        } 
-
-        pushCommentToPost.comments.push({
+    // Saves a new Comment inside the Post
+    try {                      
+        getPostById.comments.push({
             text: req.body.text,
             user_id: res.user._id
         })        
-        const savedComment = await pushCommentToPost.save()
-        res.send(pushCommentToPost)  
+
+        const savedComment = await getPostById.save()
+        res.send(savedComment)  
     } catch (error) {
         res.status(400).send({message:error})
     }

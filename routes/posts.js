@@ -14,7 +14,6 @@ router.post('/', verifyToken, async(req, res)=>{
         return res.status(400).send({message:error['details'][0]['message']})
     }
 
-    // Create new Post
     const postData = new Post({        
         user_id: res.user._id,
         title: req.body.title,
@@ -44,7 +43,7 @@ router.get('/', verifyToken, async(req, res)=>{
 router.get('/:postId', verifyToken, async(req,res)=>{
     const getPostById = await Post.findById(req.params.postId)
 
-    // Validation 1: Sends error message if post is not found
+    // Validation 1: Checks if Post exists
     if(getPostById == null){
         return res.status(400).send({message:"Cannot find post with that id"})
     }
@@ -60,12 +59,12 @@ router.get('/:postId', verifyToken, async(req,res)=>{
 router.patch('/:postId', verifyToken, async(req,res)=>{
     const getPostById = await Post.findById(req.params.postId)     
 
-    // Validation 1: Sends error message if post is not found
+    // Validation 1: Checks if Post exists
     if(getPostById == null){
         return res.status(400).send({message:"Cannot find post with that id"})
     }
    
-    // Validation 2: Check if User is owner of Post
+    // Validation 2: Checks if User is owner of Post
     if(getPostById.user_id != res.user._id) {
         return res.status(400).send({message:"User is not allowed to update this post"})
     }
@@ -94,12 +93,12 @@ router.patch('/:postId', verifyToken, async(req,res)=>{
 router.delete('/:postId', verifyToken, async(req,res)=>{
     const getPostById = await Post.findById(req.params.postId)   
 
-    // Validation 1: Sends error message if post is not found
+    // Validation 1: Checks if Post exists
     if(getPostById == null){
         return res.status(400).send({message:"Cannot find post with that id"})
     }
 
-    // Validation 2: Check if User is owner of Post   
+    // Validation 2: Checks if User is owner of Post   
     if(getPostById.user_id != res.user._id){
         return res.status(400).send({message:"User is not allowed to delete this post"})
     }
