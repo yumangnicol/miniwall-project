@@ -2,13 +2,12 @@ const express = require('express')
 const router = express.Router({mergeParams:true})
 
 const Post = require('../models/Post')
-const {postValidation} = require('../validations/validation')
 const verifyToken = require('../verifyToken')
 
 router.post('/', verifyToken, async(req,res)=>{
 
     // Validation 1: Check if User is owner of Post
-    const ownPost = await Post.findOne({user_id: res.user._id})
+    const ownPost = await Post.findOne({"_id" :req.params.postId, user_id: res.user._id})
     if(ownPost){
         return res.status(400).send({message:"User cannot like own post"})
     }
@@ -21,13 +20,17 @@ router.post('/', verifyToken, async(req,res)=>{
         } 
     } catch (error) {
         res.status(400).send({message:error})
-    }
-    
+    }    
 
     // Saves a new Like to a Post and increments likes_count by 1
     try {
         const pushLikeToPost = await Post.findById(req.params.postId)
-        Console.log(pushLikeToPost)        
+        
+        // Validation 3: Sends error message if post is not found
+        if(pushLikeToPost == null){
+            return res.status(400).send({message:"Cannot find post with that id"})
+        }          
+
         pushLikeToPost.likes.push({
             user_id: res.user._id
         })
