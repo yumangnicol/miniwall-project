@@ -19,7 +19,7 @@ router.post('/', verifyToken, async(req, res)=>{
     const postData = new Post({        
         user_id: res.user._id,
         title: req.body.title,
-        description: req.body.description,        
+        description: req.body.description        
     })    
 
     try {
@@ -41,6 +41,7 @@ router.get('/', verifyToken, async(req, res)=>{
     }
 })
 
+// Read Post
 router.get('/:postId', verifyToken, async(req,res)=>{
     try {
         const getPostById = await Post.findById(req.params.postId)
@@ -53,6 +54,35 @@ router.get('/:postId', verifyToken, async(req,res)=>{
         res.send(getPostById)
     } catch (error) {
         res.send({message: error})
+    }
+})
+
+// Update Post
+router.patch('/:postId', verifyToken, async(req,res)=>{
+    // Validation 1: Check if User is owner of Post
+    const ownPost = await Post.findOne({"_id" :req.params.postId, user_id: res.user._id})
+    if(!ownPost){
+        return res.status(400).send({message:"User is not allowed to update this post"})
+    }
+
+    // Validation 2: Checks User input
+    const {error} = postValidation(req.body)
+    if(error){
+        return res.status(400).send({message:error['details'][0]['message']})
+    }
+
+    // Saves changes to Post data
+    try {
+        const updatePostById = await Post.updateOne(
+            {_id:req.params.postId},
+            {$set: {
+                title: req.body.title,
+                description: req.body.description  
+            }}
+        )   
+        res.send(updatePostById)
+    } catch (error) {
+        res.status(400).send({message:error})
     }
 })
 
