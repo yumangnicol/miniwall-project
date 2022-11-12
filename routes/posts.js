@@ -5,6 +5,8 @@ const Post = require('../models/Post')
 const {postValidation} = require('../validations/validation')
 const verifyToken = require('../verifyToken')
 
+
+// Creates new Post
 router.post('/', verifyToken, async(req, res)=>{
 
     // Validation 1: Checks User input
@@ -28,10 +30,12 @@ router.post('/', verifyToken, async(req, res)=>{
     }
 })
 
+// Reads all Posts, arranged in descending order by likes_count
 router.get('/', verifyToken, async(req, res)=>{
 
     try {
-        // const Posts = await Post.aggregate()
+        const getPosts = await Post.find().sort({likes_count:-1})
+        res.send(getPosts)        
     } catch (error) {
         res.status(400).send({message:error})
     }
