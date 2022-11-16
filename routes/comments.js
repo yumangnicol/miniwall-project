@@ -4,7 +4,9 @@ const router = express.Router({mergeParams:true})
 const Post = require('../models/Post')
 const {commentValidation} = require('../middleware/validation')
 const verifyToken = require('../middleware/verifyToken')
+const { route } = require('./auth')
 
+// Create new Comment on Post
 router.post('/', verifyToken, async(req,res)=>{
     const getPostById = await Post.findById(req.params.postId)   
 
@@ -35,6 +37,22 @@ router.post('/', verifyToken, async(req,res)=>{
         res.send(savedComment)  
     } catch (error) {
         res.status(400).send({message:error})
+    }
+})
+
+// View all Comments on Post
+router.get('/', verifyToken, async(req,res)=>{
+    const getPostById = await Post.findById(req.params.postId)
+
+    // Validation 1: Checks if Post exists
+    if(getPostById == null){
+        return res.status(400).send({message:"Cannot find post with that id"})
+    }
+
+    try {
+        res.send(getPostById.comments)
+    } catch (error) {
+        res.send({message:error})
     }
 })
 
