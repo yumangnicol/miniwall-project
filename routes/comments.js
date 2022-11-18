@@ -46,11 +46,11 @@ router.get('/', verifyToken, async(req,res)=>{
 
     // Validation 1: Checks if Post exists
     if(getPostById == null){
-        return res.status(400).send({message:"Cannot find post with that id"})
+        return res.status(404).send({message:"Resource not found"})
     }
 
     try {
-        res.send(getPostById.comments)
+        res.status(200).send(getPostById.comments)
     } catch (error) {
         res.status(400).send({message:error})
     }
@@ -62,7 +62,7 @@ router.patch('/:commentId', verifyToken, async(req,res)=>{
         
     // Validation 1: Checks if Comment exists
     if(commentExist == null){
-        return res.status(400).send({message:"Cannot find resource"})
+        return res.status(400).send({message:"Resource not found"})
     }
 
     // Validation 2: Checks if User is Owner of Comment    
@@ -90,7 +90,7 @@ router.delete('/:commentId', verifyToken, async(req,res)=>{
         
     // Validation 1: Checks if Comment exists
     if(commentExist == null){
-        return res.status(404).send({message:"Cannot find resource"})
+        return res.status(404).send({message:"Resource not found"})
     }
 
     // Validation 2: Checks if User is Owner of Comment    

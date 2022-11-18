@@ -9,18 +9,18 @@ router.post('/', verifyToken, async(req,res)=>{
 
     // Validation 1: Sends error message if post is not found
     if(getPostById == null){
-        return res.status(400).send({message:"Cannot find post with that id"})        
+        return res.status(404).send({message:"Resource not found"})        
     }
 
     // Validation 2: Checks if User is owner of Post    
     if(getPostById.user_id == res.user._id){
-        return res.status(400).send({message:"User cannot like own post"})
+        return res.status(405).send({message:"Method not allowed"})
     }
 
     // Validation 3: Checks if User has already liked Post
     const hasLiked = await Post.findOne({ "_id" :req.params.postId, "likes.user_id": res.user._id})    
     if(hasLiked){
-        return res.status(400).send({message:"User has already liked post"})
+        return res.status(405).send({message:"Resource already liked!"})
     }  
 
     // Saves a new Like to a Post and increments likes_count by 1
@@ -30,7 +30,7 @@ router.post('/', verifyToken, async(req,res)=>{
         })
         getPostById.$inc('likes_count', 1)        
         const savedLike = await getPostById.save()
-        res.send(savedLike)
+        res.status(201).send(savedLike)
     } catch (error) {
         res.status(400).send({message:error})
     }
