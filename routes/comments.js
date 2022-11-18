@@ -105,7 +105,7 @@ router.delete('/:commentId', verifyToken, async(req,res)=>{
             {"$pull" :{"comments": {"_id":req.params.commentId}}}
         )        
         deleteComment.save()        
-        res.status(204).send({message: "Comment deleted!"})
+        res.status(200).send({message: "Comment deleted"})
     } catch (error) {
         return res.status(400).send({message:error})
     }

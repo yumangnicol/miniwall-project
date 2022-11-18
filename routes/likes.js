@@ -36,4 +36,28 @@ router.post('/', verifyToken, async(req,res)=>{
     }
 })
 
+router.delete('/', verifyToken, async(req,res)=>{
+    const getPostById = await Post.findOne({"_id" :req.params.postId, "likes.user_id": res.user._id})
+
+    // Validation 1: Sends error message if user id on likes array is not found
+    if(getPostById == null){
+        return res.status(404).send({message:"Resource not found"})        
+    }
+
+    try {
+        const deleteLike = await Post.findOneAndUpdate(
+            {"_id": req.params.postId},
+            {
+                "$pull" :{"likes": {"user_id": res.user._id}},
+                "$inc" : {"likes_count": -1}
+            }
+            // {"$inc" : {"likes_count": -1}}
+        )        
+        deleteLike.save()        
+        return res.status(200).send({message: "Post Unliked"})        
+    } catch (error) {
+        return res.status(400).send({message:error})
+    }
+})
+
 module.exports = router
