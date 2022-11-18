@@ -72,19 +72,43 @@ router.patch('/:commentId', verifyToken, async(req,res)=>{
     }    
 
     try {
-        const updateComment = await Post.findOneAndUpdate(
+        const getComment = await Post.findOneAndUpdate(
             {"_id": req.params.postId, "comments._id":req.params.commentId, "comments.user_id": res.user._id},
             {$set:{"comments.$.text": req.body.text}}
         )
-        updateComment.save()
+        const updatedComment = await getComment.save()
         
-        res.send(updateComment)        
+        res.send(updatedComment)        
     } catch (error) {
         return res.status(400).send({message:error})
     }
 })
 
 // Delete Comment on Post
+router.delete('/:commentId', verifyToken, async(req,res)=>{
+    const commentExist = await Post.findOne({"_id": req.params.postId, "comments._id":req.params.commentId})
+        
+    // Validation 1: Checks if Comment exists
+    if(commentExist == null){
+        return res.status(400).send({message:"Cannot find resource"})
+    }
 
+    // Validation 2: Checks if User is Owner of Comment    
+    const getPostComment = await Post.findOne({"_id": req.params.postId, "comments._id":req.params.commentId, "comments.user_id": res.user._id})    
+    if (getPostComment == null){
+        return res.status(400).send({message:"User cannot update resource"})
+    }    
+
+    try {
+        const deleteComment = await Post.findOneAndUpdate(
+            {"_id": req.params.postId},
+            {"$pull" :{"comments": {"_id":req.params.commentId}}}
+        )        
+        deleteComment.save()        
+        res.send({message: "Comment deleted"})
+    } catch (error) {
+        return res.status(400).send({message:error})
+    }
+})
 
 module.exports = router
