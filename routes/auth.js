@@ -49,7 +49,7 @@ router.post('/login', async(req,res)=>{
     // Validation 2: Checks if User exists
     const user = await User.findOne({email:req.body.email})
     if (!user){
-        return res.status(400).send({message:'User does not exists'}) //Change message after developing
+        return res.status(400).send({message:'User does not exists'})
     }
 
     // Validation 3: Checks User credentials
@@ -58,8 +58,8 @@ router.post('/login', async(req,res)=>{
         return res.status(400).send({message:'Password is wrong'})
     }
 
-    // Generates an Auth-Token
-    const token = jsonwebtoken.sign({_id:user.id}, process.env.TOKEN_SECRET)
+    // Generates an Auth-Token (expires in 30 minutes)
+    const token = jsonwebtoken.sign({_id:user.id}, process.env.TOKEN_SECRET, {expiresIn: +process.env.TOKEN_LIFE})
     res.header('auth-token', token).send({'auth-token':token})
 })
 
