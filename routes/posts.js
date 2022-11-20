@@ -85,8 +85,7 @@ router.patch('/:postId', verifyToken, async(req,res)=>{
             {
                 returnDocument: 'after'
             }
-        )                   
-        console.log(updatePostById)
+        )                           
         res.send(updatePostById)
     } catch (error) {
         res.status(400).send({message:error})
