@@ -108,7 +108,7 @@ router.delete('/:postId', verifyToken, async(req,res)=>{
         
     try {
         const deletePostById = await getPostById.deleteOne()
-        res.status(204).send({message: "Post deleted!"})
+        res.status(200).send({message: "Post deleted!"})
     } catch (error) {
         res.status(400).send({message:error})
     }

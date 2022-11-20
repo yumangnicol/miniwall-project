@@ -103,8 +103,7 @@ router.delete('/:commentId', verifyToken, async(req,res)=>{
         const deleteComment = await Post.findOneAndUpdate(
             {"_id": req.params.postId},
             {"$pull" :{"comments": {"_id":req.params.commentId}}}
-        )        
-        deleteComment.save()        
+        )                      
         res.status(200).send({message: "Comment deleted"})
     } catch (error) {
         return res.status(400).send({message:error})
