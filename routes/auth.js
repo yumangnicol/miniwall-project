@@ -60,7 +60,7 @@ router.post('/login', async(req,res)=>{
 
     // Generates an Auth-Token (expires in 30 minutes)
     const token = jsonwebtoken.sign({_id:user.id}, process.env.TOKEN_SECRET, {expiresIn: +process.env.TOKEN_LIFE})
-    res.header('auth-token', token).send({'auth-token':token})
+    res.header('Authorization', token).send({'access_token':token})
 })
 
 
