@@ -75,15 +75,19 @@ router.patch('/:postId', verifyToken, async(req,res)=>{
         return res.status(422).send({message:error['details'][0]['message']})
     }
 
-    try {   
-        const updatePostById = await getPostById.updateOne(
+    try {           
+        const updatePostById = await Post.findOneAndUpdate(
+            {_id: req.params.postId},        
             {$set: {
                 title: req.body.title,
                 description: req.body.description  
-            }}
-        )               
-        updatePostById.save()
-        res.status(200).send(updatePostById)
+            }},
+            {
+                returnDocument: 'after'
+            }
+        )                   
+        console.log(updatePostById)
+        res.send(updatePostById)
     } catch (error) {
         res.status(400).send({message:error})
     }
