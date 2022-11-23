@@ -73,11 +73,10 @@ router.patch('/:commentId', verifyToken, async(req,res)=>{
 
     try {
         const getComment = await Post.findOneAndUpdate(
-            {"_id": req.params.postId, "comments._id":req.params.commentId, "comments.user_id": res.user._id},
-            {$set:{"comments.$.text": req.body.text}}
-        )
-        getComment.save()
-        
+            {_id : req.params.postId, "comments._id":req.params.commentId},
+            {$set: {"comments.$.text": req.body.text}},
+            {returnDocument: 'after'}
+        )                
         res.status(200).send(getComment)        
     } catch (error) {
         return res.status(400).send({message:error})
