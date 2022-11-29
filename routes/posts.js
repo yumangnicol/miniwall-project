@@ -32,7 +32,7 @@ router.post('/', verifyToken, async(req, res)=>{
 // Reads all Posts, arranged in descending order by likes_count
 router.get('/', verifyToken, async(req, res)=>{
     try {
-        const getPosts = await Post.find().sort({likes_count:-1, created_at: 1})
+        const getPosts = await Post.find().sort({likes_count:-1, created_at: -1})
         res.status(200).send(getPosts)        
     } catch (error) {
         res.status(400).send({message:error})
