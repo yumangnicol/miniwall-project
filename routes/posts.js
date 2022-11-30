@@ -15,7 +15,7 @@ router.post('/', verifyToken, async(req, res)=>{
     }
 
     const postData = new Post({        
-        user_id: res.user._id,
+        user_id: req.user._id,
         title: req.body.title,
         description: req.body.description        
     })    
@@ -65,7 +65,7 @@ router.patch('/:postId', verifyToken, async(req,res)=>{
     }
    
     // Validation 2: Checks if User is owner of Post
-    if(getPostById.user_id != res.user._id) {
+    if(getPostById.user_id != req.user._id) {
         return res.status(403).send({message:"Forbidden access to resource"})
     }
 
@@ -102,7 +102,7 @@ router.delete('/:postId', verifyToken, async(req,res)=>{
     }
 
     // Validation 2: Checks if User is owner of Post   
-    if(getPostById.user_id != res.user._id){
+    if(getPostById.user_id != req.user._id){
         return res.status(403).send({message:"Forbidden access to resource"})
     }
         

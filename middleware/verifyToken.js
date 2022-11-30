@@ -8,7 +8,7 @@ function auth(req,res,next){
 
     try {
         const verified = jsonwebtoken.verify(token,process.env.TOKEN_SECRET)
-        res.user = verified
+        req.user = verified
         next()
     } catch (error) {
         return res.status(401).send({message:'Invalid token'})

@@ -13,12 +13,12 @@ router.post('/', verifyToken, async(req,res)=>{
     }
 
     // Validation 2: Checks if User is owner of Post    
-    if(getPostById.user_id == res.user._id){
+    if(getPostById.user_id == req.user._id){
         return res.status(405).send({message:"Method not allowed"})
     }
 
     // Validation 3: Checks if User has already liked Post
-    const hasLiked = await Post.findOne({ "_id" :req.params.postId, "likes.user_id": res.user._id})    
+    const hasLiked = await Post.findOne({ "_id" :req.params.postId, "likes.user_id": req.user._id})    
     if(hasLiked){
         return res.status(405).send({message:"Resource already liked!"})
     }  
@@ -26,7 +26,7 @@ router.post('/', verifyToken, async(req,res)=>{
     // Saves a new Like to a Post and increments likes_count by 1
     try {        
         getPostById.likes.push({
-            user_id: res.user._id
+            user_id: req.user._id
         })
         getPostById.$inc('likes_count', 1)        
         const savedLike = await getPostById.save()
@@ -37,7 +37,7 @@ router.post('/', verifyToken, async(req,res)=>{
 })
 
 router.delete('/', verifyToken, async(req,res)=>{
-    const getPostById = await Post.findOne({"_id" :req.params.postId, "likes.user_id": res.user._id})
+    const getPostById = await Post.findOne({"_id" :req.params.postId, "likes.user_id": req.user._id})
 
     // Validation 1: Sends error message if user id on likes array is not found
     if(getPostById == null){
@@ -48,7 +48,7 @@ router.delete('/', verifyToken, async(req,res)=>{
         const deleteLike = await Post.findOneAndUpdate(
             {"_id": req.params.postId},
             {
-                "$pull" :{"likes": {"user_id": res.user._id}},
+                "$pull" :{"likes": {"user_id": req.user._id}},
                 "$inc" : {"likes_count": -1}
             }
             // {"$inc" : {"likes_count": -1}}

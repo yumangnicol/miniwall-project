@@ -16,7 +16,7 @@ router.post('/', verifyToken, async(req,res)=>{
     } 
 
     // Validation 2: Checks if User is owner of Post    
-    if(getPostById.user_id == res.user._id){
+    if(getPostById.user_id == req.user._id){
         return res.status(405).send({message:"Method not allowed"})
     }
 
@@ -30,7 +30,7 @@ router.post('/', verifyToken, async(req,res)=>{
     try {                      
         getPostById.comments.push({
             text: req.body.text,
-            user_id: res.user._id
+            user_id: req.user._id
         })        
 
         const savedComment = await getPostById.save()
@@ -66,7 +66,7 @@ router.patch('/:commentId', verifyToken, async(req,res)=>{
     }
 
     // Validation 2: Checks if User is Owner of Comment    
-    const isOwnerOfComment = await Post.findOne({"_id": req.params.postId, "comments._id":req.params.commentId, "comments.user_id": res.user._id})    
+    const isOwnerOfComment = await Post.findOne({"_id": req.params.postId, "comments._id":req.params.commentId, "comments.user_id": req.user._id})    
     if (isOwnerOfComment == null){
         return res.status(403).send({message:"Forbidden access to resource"})
     }    
@@ -93,7 +93,7 @@ router.delete('/:commentId', verifyToken, async(req,res)=>{
     }
 
     // Validation 2: Checks if User is Owner of Comment    
-    const isOwnerOfComment = await Post.findOne({"_id": req.params.postId, "comments._id":req.params.commentId, "comments.user_id": res.user._id})    
+    const isOwnerOfComment = await Post.findOne({"_id": req.params.postId, "comments._id":req.params.commentId, "comments.user_id": req.user._id})    
     if (isOwnerOfComment == null){
         return res.status(403).send({message:"Forbidden access to resource"})
     }    
