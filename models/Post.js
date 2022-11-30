@@ -17,7 +17,8 @@ const commentSchema = mongoose.Schema({
     text: {
         type: String, 
         required: true,
-        min: 1
+        min: 1,
+        max: 280
     }, 
     created_at: {
         type: Date,

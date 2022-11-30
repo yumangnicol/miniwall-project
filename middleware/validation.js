@@ -19,15 +19,15 @@ const loginValidation = (data) => {
 
 const postValidation = (data) => {
     const schemaValidation = joi.object({
-        title: joi.string().required().min(2).max(280),
-        description: joi.string().required().min(2).max(280)
+        title: joi.string().required().min(1).max(280),
+        description: joi.string().required().min(1).max(280)
     })
     return schemaValidation.validate(data)
 }
 
 const commentValidation = (data) => {
     const schemaValidation = joi.object({
-        text: joi.string().required().min(1),
+        text: joi.string().required().min(1).max(280),
     })
     return schemaValidation.validate(data)
 }
