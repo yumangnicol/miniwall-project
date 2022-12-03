@@ -10,16 +10,16 @@ app.use(bodyParser.json())
 
 // Middleware
 const authRoute = require('./routes/auth')
-app.use('/api/users', authRoute)
+app.use('/api/user', authRoute)
 
 const postsRoute = require('./routes/posts')
-app.use('/api/posts', postsRoute)
+app.use('/api/post', postsRoute)
 
 const commentsRoute = require('./routes/comments')
-app.use('/api/posts/:postId/comments', commentsRoute)
+app.use('/api/post/:postId/comment', commentsRoute)
 
 const likesRoute = require('./routes/likes')
-app.use('/api/posts/:postId/likes', likesRoute)
+app.use('/api/post/:postId/like', likesRoute)
 
 mongoose.connect(process.env.DB_CONNECTOR, ()=>{
     console.log('DB is connected...')
